@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<title>Cadastro de Produto</title>
+	<h:outputStylesheet library="css" name="style.css" />
+</h:head>
+<h:body>
+	<div id="cabecalho">
+		<h:graphicImage library="imagens" name="logo-uber.png"
+			id="logoCompany" />
+	</div>
+	<div id="conteudo">
+		<h:form id="formProduto">
+			<h:inputHidden value="#{produtoBean.produto.id}" />
+			<h2>
+				<h:outputText value="Novo Produto"
+					rendered="#{empty produtoBean.produto.id}" />
+				<h:outputText value="Alterar Produto"
+					rendered="#{not empty produtoBean.produto.id}" />
+			</h2>
+
+			<fieldset>
+				<legend>Dados do Produto</legend>
+				<h:outputLabel value="Nome: " for="nome" />
+				<h:inputText id="nome" value="#{produtoBean.produto.nome}" />
+
+				<h:outputLabel value="Descricao" for="descricao" />
+				<h:inputTextarea id="descricao"
+					value="#{produtoBean.produto.descricao}" />
+
+				<h:outputLabel value="Preco: " for="preco" />
+				<h:inputText id="preco" value="#{produtoBean.produto.preco}" />
+
+				<h:commandButton value="Gravar" action="#{produtoBean.grava()}">
+					<f:ajax render="@form :formLista" execute="@form" />
+				</h:commandButton>
+				<h:commandButton value="Cancelar Edição"
+					rendered="#{not empty produtoBean.produto.id}"
+					action="#{produtoBean.cancelar()}" />
+			</fieldset>
+
+		</h:form>
+		<h2>Listagem de Produtos</h2>
+		<h:form id="formLista">
+			<h:dataTable value="#{produtoBean.produtos}" styleClass="dados"
+				rowClasses="impar,par" var="produto">
+				<h:column>
+					<f:facet name="header">Nome</f:facet>
+			#{produto.nome}
+		</h:column>
+				<h:column>
+					<f:facet name="header">Descrição</f:facet>
+			#{produto.descricao}
+		</h:column>
+				<h:column>
+					<f:facet name="header">Preço</f:facet>
+			#{produto.preco}
+			<f:facet name="footer">Soma : #{produtoBean.soma}</f:facet>
+				</h:column>
+				<h:column>
+					<f:facet name="header">Ações</f:facet>
+					<h:commandLink value="Exclir" immediate="true"
+						action="#{produtoBean.exclui(produto)}"> | 
+					<f:ajax render="@form" execute="@form" />
+					</h:commandLink>
+					<h:commandLink value="Alterar">
+						<f:setPropertyActionListener value="#{produto}"
+							target="#{produtoBean.produto}" />
+					</h:commandLink>
+				</h:column>
+			</h:dataTable>
+		</h:form>
+	</div>
+	<div id="rodape">Copyright 2033 Todos os Direitos Reservados a
+		Marcos</div>
+</h:body>
+</html>
